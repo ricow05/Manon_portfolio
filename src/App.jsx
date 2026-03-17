@@ -5,15 +5,8 @@ import Gallery from "./components/Gallery";
 import PaintingModal from "./components/PaintingModal";
 
 export default function App() {
-  const [featuredIndex, setFeaturedIndex] = useState(0);
   const [selectedPainting, setSelectedPainting] = useState(null);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setFeaturedIndex((prev) => (prev + 1) % paintings.length);
-    }, 3500);
-    return () => clearInterval(timer);
-  }, []);
+  const [lang, setLang] = useState("nl");
 
   useEffect(() => {
     if (!selectedPainting) {
@@ -37,12 +30,24 @@ export default function App() {
 
   return (
     <main className="page">
-      <ArtistStatement />
-      <Gallery
-        paintings={paintings}
-        featuredIndex={featuredIndex}
-        onSelect={setSelectedPainting}
-      />
+      <header className="page-header">
+        <h1 className="page-title">Manon Van Pottelberg</h1>
+        <button
+          type="button"
+          className="lang-toggle page-lang-toggle"
+          onClick={() => setLang(lang === "nl" ? "en" : "nl")}
+          aria-label="Toggle language"
+        >
+          {lang === "nl" ? "EN" : "NL"}
+        </button>
+      </header>
+      <section className="card portfolio-panel">
+        <ArtistStatement lang={lang} />
+        <Gallery
+          paintings={paintings}
+          onSelect={setSelectedPainting}
+        />
+      </section>
       <PaintingModal
         painting={selectedPainting}
         onClose={() => setSelectedPainting(null)}
