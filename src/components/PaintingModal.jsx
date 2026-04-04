@@ -1,5 +1,3 @@
-import { toLabel } from "../data/paintings";
-
 export default function PaintingModal({ painting, onClose }) {
   if (!painting) return null;
 
@@ -26,7 +24,7 @@ export default function PaintingModal({ painting, onClose }) {
           alt={painting.file}
         />
         <div className="modal-content">
-          <h3 id="painting-title">{toLabel(painting.file)}</h3>
+          <h3 id="painting-title">{painting.name || painting.file}</h3>
           <p>
             {painting.year} · {painting.medium}
           </p>

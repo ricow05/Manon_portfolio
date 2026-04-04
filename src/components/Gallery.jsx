@@ -1,5 +1,3 @@
-import { toLabel } from "../data/paintings";
-
 export default function Gallery({ paintings, onSelect }) {
   return (
     <section className="gallery-wrap">
@@ -7,7 +5,7 @@ export default function Gallery({ paintings, onSelect }) {
 
       <div className="grid">
         {paintings.map((painting) => (
-          <article className="painting-item" key={painting.file}>
+          <article className="painting-item" key={painting.id ?? painting.file}>
             <button
               type="button"
               className="painting-button"
@@ -15,9 +13,9 @@ export default function Gallery({ paintings, onSelect }) {
             >
               <img
                 src={painting.image_url}
-                alt={painting.file}
+                alt={painting.name || painting.file}
               />
-              <p className="painting-label">{toLabel(painting.file)}</p>
+              <p className="painting-label">{painting.name || painting.file}</p>
             </button>
           </article>
         ))}

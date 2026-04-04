@@ -83,15 +83,18 @@ export default function AdminPanel({ onSaved }) {
     setStatusMsg(null);
     const ext = file.name.split(".").pop();
     const path = `${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-    const { error: uploadError } = await supabase.storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
       .from(BUCKET)
-      .upload(path, file, { upsert: false });
+      .upload(path, file, { upsert: true, contentType: file.type });
     if (uploadError) {
-      setStatusMsg({ type: "error", text: "Upload failed: " + uploadError.message });
+      setStatusMsg({
+        type: "error",
+        text: `Upload failed: ${uploadError.message} (status: ${uploadError.statusCode ?? "unknown"})`,
+      });
       setUploadingIdx(null);
       return;
     }
-    const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
+    const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(uploadData.path);
     updatePainting(idx, "image_url", urlData.publicUrl);
     updatePainting(idx, "file", file.name);
     setStatusMsg({ type: "success", text: `Uploaded ${file.name}. Don't forget to save.` });
@@ -126,6 +129,7 @@ export default function AdminPanel({ onSaved }) {
       {
         file: "",
         image_url: "",
+        name: "",
         year: String(new Date().getFullYear()),
         medium: "",
         dimensions: "",
@@ -269,6 +273,12 @@ export default function AdminPanel({ onSaved }) {
             </div>
 
             <div className="admin-row-fields">
+              <input
+                className="admin-input admin-input--sm"
+                placeholder="Name"
+                value={p.name}
+                onChange={(e) => updatePainting(idx, "name", e.target.value)}
+              />
               <input
                 className="admin-input admin-input--sm"
                 placeholder="Year"
