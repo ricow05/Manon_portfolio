@@ -204,6 +204,13 @@ export default function AdminPanel({ onSaved }) {
       <div className="admin-toolbar">
         <h2 className="admin-toolbar-title">Gallery Editor</h2>
         <div className="admin-toolbar-actions">
+          <a
+            className="admin-btn admin-btn--ghost"
+            href="#"
+            onClick={(e) => { e.preventDefault(); window.location.hash = ""; }}
+          >
+            ← View site
+          </a>
           <button className="admin-btn admin-btn--ghost" onClick={logout}>
             Sign out
           </button>

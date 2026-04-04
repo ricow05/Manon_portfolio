@@ -67,6 +67,14 @@ export default function App() {
         >
           {lang === "nl" ? "EN" : "NL"}
         </button>
+        <button
+          type="button"
+          className="lang-toggle"
+          onClick={() => { window.location.hash = "admin"; }}
+          aria-label="Go to admin"
+        >
+          Admin
+        </button>
       </header>
       <section className="card portfolio-panel">
         <ArtistStatement lang={lang} />
