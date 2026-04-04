@@ -73,7 +73,7 @@ async function putBinaryFile(token, branch, path, base64, sha, message) {
   }
 }
 
-export default function AdminPanel() {
+export default function AdminPanel({ onSaved }) {
   const [token, setToken] = useState(
     () => sessionStorage.getItem("admin_token") || ""
   );
@@ -156,6 +156,7 @@ export default function AdminPanel() {
         putFile(t, SOURCE_BRANCH, DATA_SOURCE, json, sourceFile?.sha, "Update paintings (admin panel)"),
       ]);
       setStatusMsg({ type: "success", text: "Saved! Changes are live on the site." });
+      onSaved?.();
     } catch (err) {
       setStatusMsg({ type: "error", text: "Save failed: " + err.message });
     } finally {

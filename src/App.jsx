@@ -12,11 +12,15 @@ export default function App() {
     () => window.location.hash === "#admin"
   );
 
-  useEffect(() => {
-    fetch("/paintings.json")
+  function fetchPaintings() {
+    fetch("/paintings.json", { cache: "no-cache" })
       .then((r) => r.json())
       .then(setPaintings)
       .catch(console.error);
+  }
+
+  useEffect(() => {
+    fetchPaintings();
   }, []);
 
   useEffect(() => {
@@ -46,7 +50,7 @@ export default function App() {
   }, [selectedPainting]);
 
   if (isAdmin) {
-    return <AdminPanel />;
+    return <AdminPanel onSaved={fetchPaintings} />;
   }
 
   return (
