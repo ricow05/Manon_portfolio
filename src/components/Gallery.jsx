@@ -14,7 +14,7 @@ export default function Gallery({ paintings, onSelect }) {
               onClick={() => onSelect(painting)}
             >
               <img
-                src={`./art-images/paintings/${encodeURIComponent(painting.file)}`}
+                src={painting.image_url}
                 alt={painting.file}
               />
               <p className="painting-label">{toLabel(painting.file)}</p>

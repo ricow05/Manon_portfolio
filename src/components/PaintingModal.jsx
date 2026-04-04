@@ -22,7 +22,7 @@ export default function PaintingModal({ painting, onClose }) {
         </button>
         <img
           className="modal-image"
-          src={`./art-images/paintings/${encodeURIComponent(painting.file)}`}
+          src={painting.image_url}
           alt={painting.file}
         />
         <div className="modal-content">

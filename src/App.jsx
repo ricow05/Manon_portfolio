@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { supabase } from "./lib/supabase";
 import ArtistStatement from "./components/ArtistStatement";
 import Gallery from "./components/Gallery";
 import PaintingModal from "./components/PaintingModal";
@@ -12,11 +13,12 @@ export default function App() {
     () => window.location.hash === "#admin"
   );
 
-  function fetchPaintings() {
-    fetch("/paintings.json", { cache: "no-cache" })
-      .then((r) => r.json())
-      .then(setPaintings)
-      .catch(console.error);
+  async function fetchPaintings() {
+    const { data, error } = await supabase
+      .from("paintings")
+      .select("*")
+      .order("sort_order", { ascending: true });
+    if (!error) setPaintings(data ?? []);
   }
 
   useEffect(() => {
