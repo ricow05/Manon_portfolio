@@ -285,3 +285,273 @@ p {
     padding: 0.25rem 0.5rem 0.5rem;
   }
 }
+
+/* ── Admin panel ──────────────────────────────────────────────────────────── */
+
+.admin-page {
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.admin-login {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 440px;
+  margin: 6rem auto 0;
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 2.5rem 2rem;
+}
+
+.admin-login-title {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.admin-hint {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+
+.admin-hint a {
+  color: var(--text);
+}
+
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.admin-toolbar-title {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.admin-toolbar-actions {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.admin-msg {
+  margin: 0 0 1.25rem;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.admin-msg--success {
+  background: #e6f4ea;
+  color: #1a5e2a;
+}
+
+.admin-msg--error {
+  background: #fdecea;
+  color: #7a1414;
+}
+
+.admin-loading {
+  margin: 0 0 1rem;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.admin-paintings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-row {
+  display: grid;
+  grid-template-columns: 1.5rem 140px 1fr 2rem;
+  gap: 0.75rem;
+  align-items: start;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 0.85rem;
+  cursor: grab;
+}
+
+.admin-row:active {
+  cursor: grabbing;
+}
+
+.admin-row-handle {
+  font-size: 1.2rem;
+  color: #aaa;
+  padding-top: 0.35rem;
+  user-select: none;
+}
+
+.admin-row-thumb {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.admin-thumb {
+  width: 120px;
+  height: 90px;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+}
+
+.admin-thumb--empty {
+  background: #dde2ea;
+}
+
+.admin-filename {
+  font-size: 0.7rem;
+  opacity: 0.55;
+  word-break: break-all;
+  text-align: center;
+}
+
+.admin-upload-btn {
+  display: inline-block;
+  font-family: inherit;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.6rem;
+  border: 1.5px solid var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+.admin-upload-btn:hover {
+  background: var(--text);
+  color: var(--card);
+}
+
+.admin-upload-btn--busy {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.admin-row-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-input {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.65rem;
+  border: 1.5px solid #c8cedb;
+  border-radius: 8px;
+  background: #f7f8fb;
+  color: var(--text);
+  resize: none;
+  transition: border-color 0.15s;
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: var(--text);
+}
+
+.admin-input--sm {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.admin-textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.admin-delete-btn {
+  background: transparent;
+  border: none;
+  color: #c0392b;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.35rem;
+  border-radius: 6px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.admin-delete-btn:hover {
+  background: #fdecea;
+}
+
+.admin-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  gap: 0.75rem;
+}
+
+.admin-btn {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid var(--text);
+  transition: background 0.15s, color 0.15s, opacity 0.15s;
+}
+
+.admin-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-btn--primary {
+  background: var(--text);
+  color: var(--card);
+}
+
+.admin-btn--primary:hover:not(:disabled) {
+  background: transparent;
+  color: var(--text);
+}
+
+.admin-btn--ghost {
+  background: transparent;
+  color: var(--text);
+}
+
+.admin-btn--ghost:hover:not(:disabled) {
+  background: var(--text);
+  color: var(--card);
+}
+
+@media (max-width: 640px) {
+  .admin-row {
+    grid-template-columns: 1.5rem 1fr 2rem;
+    grid-template-rows: auto auto;
+  }
+
+  .admin-row-thumb {
+    grid-column: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .admin-row-fields {
+    grid-column: 1 / -1;
+  }
+}

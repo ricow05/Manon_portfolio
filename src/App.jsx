@@ -1,12 +1,29 @@
 import { useEffect, useState } from "react";
-import { paintings } from "./data/paintings";
 import ArtistStatement from "./components/ArtistStatement";
 import Gallery from "./components/Gallery";
 import PaintingModal from "./components/PaintingModal";
+import AdminPanel from "./components/AdminPanel";
 
 export default function App() {
+  const [paintings, setPaintings] = useState([]);
   const [selectedPainting, setSelectedPainting] = useState(null);
   const [lang, setLang] = useState("nl");
+  const [isAdmin, setIsAdmin] = useState(
+    () => window.location.hash === "#admin"
+  );
+
+  useEffect(() => {
+    fetch("/paintings.json")
+      .then((r) => r.json())
+      .then(setPaintings)
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    const onHash = () => setIsAdmin(window.location.hash === "#admin");
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
 
   useEffect(() => {
     if (!selectedPainting) {
@@ -27,6 +44,10 @@ export default function App() {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [selectedPainting]);
+
+  if (isAdmin) {
+    return <AdminPanel />;
+  }
 
   return (
     <main className="page">
