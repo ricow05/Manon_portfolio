@@ -1,0 +1,88 @@
+.portfolio-panel {
+  padding: 1rem;
+}
+
+.artist-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+  padding: 1rem;
+}
+
+.artist-row {
+  display: grid;
+  gap: 1rem;
+}
+
+.artist-row-top {
+  grid-template-columns: 30% 70%;
+}
+
+.artist-row-bottom {
+  grid-template-columns: 70% 30%;
+}
+
+.artist-photo-card,
+.artist-description-card,
+.artist-statement-card,
+.artist-featured-card {
+  padding: 0.75rem;
+}
+
+.artist-photo-card {
+  padding: 0.85rem;
+}
+
+.artist-photo-card img,
+.artist-featured-card img {
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+}
+
+.artist-featured-card img {
+  opacity: 1;
+  filter: none;
+}
+
+.artist-description-card h1,
+.artist-statement-card h2 {
+  margin: 0 0 0.75rem;
+}
+
+.artist-description-card p,
+.artist-statement-card p,
+.artist-featured-card p {
+  margin: 0;
+}
+
+.statement-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.card p {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+}
+
+.artist-layout p {
+  padding: 0;
+  font-weight: 400;
+}
+
+@media (max-width: 900px) {
+  .artist-row,
+  .artist-row-top,
+  .artist-row-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .artist-photo-card img,
+  .artist-featured-card img {
+    height: 300px;
+  }
+}

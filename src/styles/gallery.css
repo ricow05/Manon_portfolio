@@ -1,0 +1,64 @@
+.gallery-wrap {
+  margin-top: 35rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.painting-item {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.grid img {
+  width: auto;
+  max-width: 100%;
+  height: 320px;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+.painting-button {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.painting-label {
+  margin-top: 0.5rem;
+  padding: 0;
+  font-weight: 400;
+  font-style: italic;
+  font-family: cursive;
+  opacity: 0.75;
+}
+
+.painting-button:focus-visible {
+  outline: 3px solid #2b5aa6;
+  outline-offset: -3px;
+}
+
+@media (max-width: 900px) {
+  .grid img {
+    height: 300px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,9 +8,10 @@ export default function AdminPanel({ onSaved }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [paintings, setPaintings] = useState([]);
+  const [expos, setExpos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [statusMsg, setStatusMsg] = useState(null); // { type: 'success'|'error', text }
+  const [statusMsg, setStatusMsg] = useState(null);
   const [uploadingIdx, setUploadingIdx] = useState(null);
   const dragIdx = useRef(null);
 
@@ -42,6 +43,7 @@ export default function AdminPanel({ onSaved }) {
   async function logout() {
     await supabase.auth.signOut();
     setPaintings([]);
+    setExpos([]);
     setStatusMsg(null);
   }
 
@@ -57,6 +59,12 @@ export default function AdminPanel({ onSaved }) {
     if (error) setStatusMsg({ type: "error", text: "Could not load paintings: " + error.message });
     else setPaintings(data ?? []);
     setLoading(false);
+    // load expos in parallel
+    const { data: expoData } = await supabase
+      .from("expos")
+      .select("*")
+      .order("sort_order", { ascending: true });
+    setExpos(expoData ?? []);
   }
 
   // â”€â”€ saving â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -64,9 +72,42 @@ export default function AdminPanel({ onSaved }) {
   async function save() {
     setSaving(true);
     setStatusMsg(null);
-    // Assign sort_order by current array position
-    const rows = paintings.map((p, i) => ({ ...p, sort_order: i }));
-    const { error } = await supabase.from("paintings").upsert(rows);
+
+    async function saveTable(table, rows, setRows) {
+      const existing = rows.filter((r) => r.id).map((r, i) => ({ ...r, sort_order: rows.indexOf(r) }));
+      const fresh    = rows.filter((r) => !r.id).map((r, i) => {
+        const { id: _id, ...rest } = r;
+        return { ...rest, sort_order: rows.indexOf(r) };
+      });
+
+      const ops = [];
+      if (existing.length) ops.push(supabase.from(table).upsert(existing, { onConflict: "id" }));
+      if (fresh.length)    ops.push(supabase.from(table).insert(fresh).select());
+
+      const results = await Promise.all(ops);
+      const err = results.find((r) => r.error)?.error;
+      if (err) return err;
+
+      // Merge returned IDs back into state so re-saves don't duplicate
+      const insertedResult = results.find((r) => r.data && fresh.length);
+      if (insertedResult?.data) {
+        setRows((prev) => {
+          const withoutFresh = prev.filter((r) => r.id);
+          return [...withoutFresh, ...insertedResult.data].sort((a, b) => a.sort_order - b.sort_order);
+        });
+      }
+      return null;
+    }
+
+    const paintingRows = paintings.map((p, i) => ({ ...p, sort_order: i }));
+    const expoRows     = expos.map((e, i) => ({ ...e, sort_order: i }));
+
+    const [pe, ee] = await Promise.all([
+      saveTable("paintings", paintingRows, setPaintings),
+      saveTable("expos",     expoRows,     setExpos),
+    ]);
+
+    const error = pe || ee;
     if (error) {
       setStatusMsg({ type: "error", text: "Save failed: " + error.message });
     } else {
@@ -136,6 +177,30 @@ export default function AdminPanel({ onSaved }) {
         description: "",
         sort_order: prev.length,
       },
+    ]);
+  }
+
+  function updateExpo(idx, field, value) {
+    setExpos((prev) =>
+      prev.map((e, i) => (i === idx ? { ...e, [field]: value } : e))
+    );
+  }
+
+  async function deleteExpo(idx) {
+    const e = expos[idx];
+    if (!window.confirm("Remove this expo?")) return;
+    if (e.id) {
+      const { error } = await supabase.from("expos").delete().eq("id", e.id);
+      if (error) { setStatusMsg({ type: "error", text: "Delete failed: " + error.message }); return; }
+    }
+    setExpos((prev) => prev.filter((_, i) => i !== idx));
+    onSaved?.();
+  }
+
+  function addExpo() {
+    setExpos((prev) => [
+      ...prev,
+      { name: "", description: "", sort_order: prev.length },
     ]);
   }
 
@@ -332,6 +397,49 @@ export default function AdminPanel({ onSaved }) {
       <div className="admin-footer">
         <button className="admin-btn admin-btn--ghost" onClick={addPainting}>
           + Add painting
+        </button>
+        <button
+          className="admin-btn admin-btn--primary"
+          onClick={save}
+          disabled={saving || loading}
+        >
+          {saving ? "Saving…" : "Save changes"}
+        </button>
+      </div>
+
+      <h2 className="admin-section-title">Expo's</h2>
+
+      <div className="admin-expos">
+        {expos.map((e, idx) => (
+          <div key={e.id ?? idx} className="admin-expo-row">
+            <input
+              className="admin-input admin-input--sm"
+              placeholder="Name"
+              value={e.name}
+              onChange={(ev) => updateExpo(idx, "name", ev.target.value)}
+            />
+            <textarea
+              className="admin-input admin-textarea"
+              placeholder="Description"
+              value={e.description}
+              rows={2}
+              onChange={(ev) => updateExpo(idx, "description", ev.target.value)}
+            />
+            <button
+              className="admin-delete-btn"
+              onClick={() => deleteExpo(idx)}
+              title="Remove expo"
+              aria-label="Remove expo"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="admin-footer">
+        <button className="admin-btn admin-btn--ghost" onClick={addExpo}>
+          + Add expo
         </button>
         <button
           className="admin-btn admin-btn--primary"

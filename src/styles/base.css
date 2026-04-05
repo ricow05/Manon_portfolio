@@ -1,0 +1,80 @@
+:root {
+  --bg: #ebeef2;
+  --text: #243b63;
+  --card: #ffffff;
+  --shadow: 0 10px 24px rgba(22, 30, 44, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Times New Roman", Times, serif;
+  background: radial-gradient(circle at top right, #f7f8fb 0%, var(--bg) 55%);
+  color: var(--text);
+}
+
+h1,
+h2 {
+  margin: 0 0 1rem;
+  letter-spacing: 0.02em;
+}
+
+p {
+  line-height: 1.6;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.page {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 2rem 0.9rem 3rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.page-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.page-lang-toggle {
+  margin-left: auto;
+}
+
+.lang-toggle {
+  border: 2px solid var(--text);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.lang-toggle:hover {
+  background: var(--text);
+  color: var(--card);
+}

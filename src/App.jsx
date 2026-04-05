@@ -4,9 +4,11 @@ import ArtistStatement from "./components/ArtistStatement";
 import Gallery from "./components/Gallery";
 import PaintingModal from "./components/PaintingModal";
 import AdminPanel from "./components/AdminPanel";
+import Expos from "./components/Expos";
 
 export default function App() {
   const [paintings, setPaintings] = useState([]);
+  const [expos, setExpos] = useState([]);
   const [selectedPainting, setSelectedPainting] = useState(null);
   const [lang, setLang] = useState("nl");
   const [isAdmin, setIsAdmin] = useState(
@@ -21,8 +23,17 @@ export default function App() {
     if (!error) setPaintings(data ?? []);
   }
 
+  async function fetchExpos() {
+    const { data, error } = await supabase
+      .from("expos")
+      .select("*")
+      .order("sort_order", { ascending: true });
+    if (!error) setExpos(data ?? []);
+  }
+
   useEffect(() => {
     fetchPaintings();
+    fetchExpos();
   }, []);
 
   useEffect(() => {
@@ -52,7 +63,7 @@ export default function App() {
   }, [selectedPainting]);
 
   if (isAdmin) {
-    return <AdminPanel onSaved={fetchPaintings} />;
+    return <AdminPanel onSaved={() => { fetchPaintings(); fetchExpos(); }} />;
   }
 
   return (
@@ -82,6 +93,7 @@ export default function App() {
           paintings={paintings}
           onSelect={setSelectedPainting}
         />
+        <Expos expos={expos} />
       </section>
       <PaintingModal
         painting={selectedPainting}
