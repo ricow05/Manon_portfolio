@@ -74,6 +74,29 @@
   font-weight: 400;
 }
 
+.artist-description-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.artist-instagram-link {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: auto;
+  transition: opacity 0.2s;
+}
+
+.artist-instagram-link img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+  display: block;
+}
+
+.artist-instagram-link:hover {
+  opacity: 0.6;
+}
+
 @media (max-width: 900px) {
   .artist-row,
   .artist-row-top,

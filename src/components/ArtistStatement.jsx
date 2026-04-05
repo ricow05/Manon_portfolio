@@ -35,6 +35,14 @@ export default function ArtistStatement({ lang }) {
         <article className="artist-description-card">
           <h1>{descriptionTitle}</h1>
           <p>{descriptionText}</p>
+          <a
+            href="https://www.instagram.com/oui_ou_manon?igsh=MWk1cTlnandmdms0aQ=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="artist-instagram-link"
+          >
+            <img src="./instagram logo.webp" alt="Instagram" />
+          </a>
         </article>
       </div>
 
